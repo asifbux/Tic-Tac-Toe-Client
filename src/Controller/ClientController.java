@@ -1,3 +1,10 @@
+package Controller;
+
+import Model.Constants;
+import Model.Player;
+import Model.PlayerHelper;
+import View.GameView;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,21 +26,24 @@ public class ClientController implements Constants {
             gameView = new GameView();
             output = new ObjectOutputStream(aSocket.getOutputStream());
             input = new ObjectInputStream(aSocket.getInputStream());
-
             gameView.createActionListener(new ClickListener());
-            playerHelper = new PlayerHelper(new Player(gameView.getPlayersName("Enter Player's Name"), 'Z'), null, null, 0);
             gameView.setTextArea("Waiting for Opponent to join. Please Wait");
-            output.writeObject(playerHelper);
-            output.flush();
+
             while (true) {
+                try {
                 playerHelper = (PlayerHelper) input.readObject();
                 serverResponse(playerHelper.getResponseNumber());
+                } catch (EOFException e) {
+                    // ... this is fine
+                } catch(IOException e) {
+                    // handle exception which is not expected
+                    e.printStackTrace();
+                }
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
             System.out.println("Server Error");
         }
-
     }
 
     public void serverResponse(int option) throws IOException, ClassNotFoundException {
@@ -90,12 +100,17 @@ public class ClientController implements Constants {
         gameView.addMarkOnView(playerHelper.getPosition()[0], playerHelper.getPosition()[1], LETTER_O);
         this.gameView.setTextArea(playerHelper.getLine());
     }
+    if(option == 13) {
+        playerHelper = new PlayerHelper(new Player(gameView.getPlayersName("Enter Player's Name"), 'Z'), null, null, 0);
+        output.writeObject(playerHelper);
+        output.flush();
+        resetObject();
+    }
     }
 
     public void resetObject() {
         playerHelper = new PlayerHelper(playerHelper.getPlayer(), null, null, 0);
     }
-
 
     public void close() {
         try {

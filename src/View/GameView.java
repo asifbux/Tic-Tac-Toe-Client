@@ -1,3 +1,5 @@
+package View;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -163,23 +165,10 @@ public class GameView extends JFrame {
         }
     }
 
-    /**
-     * Adds the mark on view.
-     *
-     * @param source the source
-     * @param mark the mark
-     */
     public void addMarkOnView(int row, int col, char mark) {
         jButtons[row][col].setText(String.valueOf(mark));
     }
 
-    /**
-     * Gets the position of buttons.
-     *
-     * @param source the source
-     * @param mark the mark
-     * @return the position of buttons
-     */
     public int[] getPositionOfButtons(JButton source) {
         for(int i = 0; i < jButtons.length; i++) {
             for(int j = 0; j < jButtons.length; j++ ) {
