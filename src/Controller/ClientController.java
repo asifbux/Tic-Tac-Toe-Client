@@ -44,7 +44,6 @@ public class ClientController implements Constants {
                 } catch (EOFException e) {
                     // ... this is fine
                 } catch(IOException e) {
-                    // handle exception which is not expected
                     e.printStackTrace();
                 }
             }
@@ -61,73 +60,74 @@ public class ClientController implements Constants {
      * @throws IOException            the io exception
      * @throws ClassNotFoundException the class not found exception
      */
-    public void serverResponse(int option) throws IOException, ClassNotFoundException {
-
-    if(option ==1)
+    public void serverResponse(int option) throws IOException {
+        if(option ==1)
             gameView.setTextArea(playerHelper.getLine());
-    if(option ==2) {
-        playerHelper.getPlayer().setMark(playerHelper.getPlayer().getMark());
-        gameView.setPlayerText(playerHelper.getPlayer().getMark() + "");
-        gameView.setPlayerNameText(playerHelper.getPlayer().getName());
-    }
-    if(option == 3) {
-        yourTurn = true;
-        this.gameView.setTextArea(playerHelper.getLine());
-        //write xPlayerHelper object with X's row and col
-    }
-    if(option ==4) {
-        this.gameView.setTextArea(playerHelper.getLine());
-    }
-    if(option ==5) {
-        this.gameView.setTextArea(playerHelper.getLine());
-    }
-    if(option == 6) { // marking for your own board when the mark has been validated by server
-        gameView.addMarkOnView(playerHelper.getPosition()[0], playerHelper.getPosition()[1], playerHelper.getPlayer().getMark());
-        this.gameView.setTextArea(playerHelper.getLine());
-        // disable actionlister for this client
-    }
-    if(option ==7) { // to tell the player move is invalid and listener starts wirting the object again
-        this.gameView.setTextArea(playerHelper.getLine());
-        yourTurn = true;
-    }
-    if(option ==8) {
-        this.gameView.setTextArea(playerHelper.getLine());
-        gameView.createMessageDialog("THE GAME IS OVER IN TIE");
-        close();
-    }
-    if(option ==9) {
+        if(option ==2) {
+            playerHelper.getPlayer().setMark(playerHelper.getPlayer().getMark());
+            gameView.setPlayerText(playerHelper.getPlayer().getMark() + "");
+            gameView.setPlayerNameText(playerHelper.getPlayer().getName());
+        }
+        if(option == 3) {
+            yourTurn = true;
             this.gameView.setTextArea(playerHelper.getLine());
-            gameView.createMessageDialog("THE GAME IS OVER: " + playerHelper.getPlayer().getName() + " you are winner!");
+            //write xPlayerHelper object with X's row and col
+        }
+        if(option ==4) {
+            this.gameView.setTextArea(playerHelper.getLine());
+        }
+        if(option ==5) {
+            this.gameView.setTextArea(playerHelper.getLine());
+        }
+        if(option == 6) { // marking for your own board when the mark has been validated by server
+            gameView.addMarkOnView(playerHelper.getPosition()[0], playerHelper.getPosition()[1], playerHelper.getPlayer().getMark());
+            this.gameView.setTextArea(playerHelper.getLine());
+            // disable actionlister for this client
+        }
+        if(option ==7) { // to tell the player move is invalid and listener starts wirting the object again
+            this.gameView.setTextArea(playerHelper.getLine());
+            yourTurn = true;
+        }
+        if(option ==8) {
+            this.gameView.setTextArea(playerHelper.getLine());
+            gameView.createMessageDialog("THE GAME IS OVER IN TIE");
             close();
-    }
-    if(option ==12) {
-        this.gameView.setTextArea(playerHelper.getLine());
-        gameView.createMessageDialog("THE GAME IS OVER YOU LOST!");
-        close();
-    }
-    if(option == 10) { // marking for O when x is playing
-        System.out.println(playerHelper.getLine());
-        gameView.addMarkOnView(playerHelper.getPosition()[0], playerHelper.getPosition()[1], LETTER_X);
-        this.gameView.setTextArea(playerHelper.getLine());
-    }
-    if(option == 11) { // marking for X when O is playing
-        System.out.println(playerHelper.getLine());
-        gameView.addMarkOnView(playerHelper.getPosition()[0], playerHelper.getPosition()[1], LETTER_O);
-        this.gameView.setTextArea(playerHelper.getLine());
-    }
-    if(option == 13) {
-        playerHelper = new PlayerHelper(new Player(gameView.getPlayersName("Enter Player's Name"), 'Z'), null, null, 0);
-        output.writeObject(playerHelper);
-        output.flush();
-        resetObject();
-    }
+        }
+        if(option ==9) {
+                this.gameView.setTextArea(playerHelper.getLine());
+                gameView.createMessageDialog("THE GAME IS OVER: " + playerHelper.getPlayer().getName() + " you are winner!");
+                close();
+        }
+        if(option ==12) {
+            this.gameView.setTextArea(playerHelper.getLine());
+            gameView.createMessageDialog("THE GAME IS OVER YOU LOST!");
+            close();
+        }
+        if(option == 10) { // marking for O when x is playing
+            System.out.println(playerHelper.getLine());
+            gameView.addMarkOnView(playerHelper.getPosition()[0], playerHelper.getPosition()[1], LETTER_X);
+            this.gameView.setTextArea(playerHelper.getLine());
+        }
+        if(option == 11) { // marking for X when O is playing
+            System.out.println(playerHelper.getLine());
+            gameView.addMarkOnView(playerHelper.getPosition()[0], playerHelper.getPosition()[1], LETTER_O);
+            this.gameView.setTextArea(playerHelper.getLine());
+        }
+        if(option == 13) {
+            playerHelper = new PlayerHelper(new Player(gameView.getPlayersName("Enter Player's Name"), 'Z'), null, null, 0);
+            output.writeObject(playerHelper);
+            output.flush();
+            resetObject();
+        }
     }
 
     /**
      * Reset object.
      */
     public void resetObject() {
-        playerHelper = new PlayerHelper(playerHelper.getPlayer(), null, null, 0);
+        if (playerHelper != null) {
+            playerHelper = new PlayerHelper(playerHelper.getPlayer(), null, null, 0);
+        }
     }
 
     /**
