@@ -4,13 +4,15 @@ import Model.Constants;
 import Model.Player;
 import Model.PlayerHelper;
 import View.GameView;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.Socket;
 
+/**
+ * The type Client controller.
+ */
 public class ClientController implements Constants {
 
     private Socket aSocket;
@@ -20,6 +22,12 @@ public class ClientController implements Constants {
     private PlayerHelper playerHelper;
     private boolean yourTurn = false;
 
+    /**
+     * Instantiates a new Client controller.
+     *
+     * @param serverName the server name
+     * @param portNumber the port number
+     */
     public ClientController(String serverName, int portNumber) {
         try {
             aSocket = new Socket(serverName, portNumber);
@@ -46,6 +54,13 @@ public class ClientController implements Constants {
         }
     }
 
+    /**
+     * Server response.
+     *
+     * @param option the option
+     * @throws IOException            the io exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     public void serverResponse(int option) throws IOException, ClassNotFoundException {
 
     if(option ==1)
@@ -108,10 +123,16 @@ public class ClientController implements Constants {
     }
     }
 
+    /**
+     * Reset object.
+     */
     public void resetObject() {
         playerHelper = new PlayerHelper(playerHelper.getPlayer(), null, null, 0);
     }
 
+    /**
+     * Close.
+     */
     public void close() {
         try {
             input.close();
@@ -138,8 +159,14 @@ public class ClientController implements Constants {
         }
     }
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws IOException the io exception
+     */
     public static void main(String[] args) throws IOException {
-        ClientController aClient = new ClientController("10.13.182.7", 9806);
+        ClientController aClient = new ClientController("localhost", 9806);
     }
 }
 

@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-// TODO: Auto-generated Javadoc
+
 
 /**
  * The Class GameView.
